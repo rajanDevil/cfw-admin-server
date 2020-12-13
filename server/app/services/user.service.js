@@ -13,7 +13,6 @@ exports.register = (userParam) => {
 			password : passwordHash
 		}
 		connection.query(`insert into users set ?`, users, (error, userInsert) => {
-			connection.end();
 			if(error){
 				return reject(error);
 			} else {
@@ -56,7 +55,7 @@ exports.login = ({ email, password }) => {
 
 exports.getById = async (id) => {
 	return new Promise((resolve, reject) => {
-		connection.query(`select id,name,email,password from users where id = ?`,[id], function(error, userResult, fields){
+		connection.query(`select * from users where id = ?`,[id], function(error, userResult, fields){
 			if(error){
 				return reject(error);
 			}else{
@@ -66,10 +65,92 @@ exports.getById = async (id) => {
 	});
 }
 
-exports.list = (reqParams) => {
+exports.list = (reqParam) => {
 	return new Promise( async (resolve, reject) => {
-		connection.query(`select id,name,username,email,password from users where id = ?`,[reqParams], function (err, userResult, fields) {
-			if (err) {
+		connection.query(`select * from users ORDER BY `+reqParam._sort+` `+reqParam._order+` LIMIT ?,?`, [parseInt(reqParam._start), parseInt(reqParam._skip)], function (error, userResult) {
+			if (error) {
+				return reject(error);
+			} else {
+				
+				return resolve(userResult);
+			}
+		});
+	});
+}
+
+exports.update = (reqParam) => {
+	return new Promise( async (resolve, reject) => {
+		let user = {
+			name: reqParam.name,
+			email: reqParam.email,
+			username: reqParam.username
+		}
+		console.log(user);
+		connection.query(`update users set ? where id = `+reqParam.id, user, (error, userUpdate) => {
+			if(error){
+				return reject(error);
+			} else {
+				return resolve(userUpdate);
+			}
+		});
+	});
+}
+
+exports.deleteMany = (reqParam) => {
+	return new Promise( async (resolve, reject) => {
+		connection.query(`delete from users where id in (?)`, [reqParam.id], function (error, userResult, fields) {
+			if (error) {
+				return reject(error);
+			} else {
+				return resolve(userResult);
+			}
+		});
+	});
+}
+
+exports.getMany = (reqParam) => {
+	console.log('Im here');
+	return new Promise( async (resolve, reject) => {
+		connection.query(`select * from users where id in (?)`, [reqParam.id], function (error, userResult, fields) {
+			if (error) {
+				return reject(error);
+			} else {
+				return resolve(userResult);
+			}
+		});
+	});
+}
+
+exports.getLatest = () => {
+	return new Promise( async (resolve, reject) => {
+		connection.query(`select * from users order by id desc limit 1`, function (error, userResult, fields) {
+			connection.end();
+			if (error) {
+				return reject(error);
+			} else {
+				return resolve(userResult);
+			}
+		});
+	});
+}
+
+
+exports.delete = (reqParam) => {
+	return new Promise( async (resolve, reject) => {
+		connection.query(`delete from users where id = ?`, [reqParam], function (error, userResult, fields) {
+			if (error) {
+				return reject(error);
+			} else {
+				return resolve(userResult);
+			}
+		});
+	});
+}
+
+exports.deleteMany = (reqParam) => {
+	return new Promise( async (resolve, reject) => {
+		connection.query(`delete from users where id in (?)`, [reqParam.id], function (error, userResult, fields) {
+			if (error) {
 				return reject(error);
 			} else {
 				return resolve(userResult);

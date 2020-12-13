@@ -1,10 +1,11 @@
 
 //Edit this to set controller prefix
-const controllerPrefix = 'todo';
+const controllerPrefix = 'productCategories';
 ///////////////////////////////////
 const controller = require('../controllers/'+controllerPrefix+'.controller');
 const express = require('express');
 const router = express.Router();
+
 
 router.post('/add', controller.add);
 router.patch('/patch', controller.update);

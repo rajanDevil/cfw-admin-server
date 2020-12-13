@@ -1,7 +1,7 @@
 //Change This//////////////////////////
-const controllerPrefix = 'todo';
-const tableName = 'todos';
-const referenceTableID = 'userID';
+const controllerPrefix = 'vendorReturns';
+const tableName = 'vendor_returns';
+const referenceTableID = 'purchase_id';
 /////////////////////////////////////
 const service = require('../services/'+controllerPrefix+'.service');
 const connection = require('../helpers/dbconnect.helper');
@@ -9,7 +9,7 @@ const { all } = require('../routes/user.route');
 
 exports.add = async (req, res,next) => {
 	let abc = req.body;
-	console.log(req.body.title);
+	
 	try {
 
 		let result = await service.add(abc);
@@ -38,6 +38,7 @@ exports.add = async (req, res,next) => {
 
 exports.update = async (req, res,next) => {
 	let theQuery = req.body;
+	
 	try {
 		let result = await service.update(theQuery);
 		let currentElement = await service.getById(theQuery.id);
@@ -183,7 +184,6 @@ exports.getById = async (req, res, next) => {
 	}
 }
 exports.getMany = async (req, res, next) => {
-	console.log("we trying now");
 	try {
 		
 	

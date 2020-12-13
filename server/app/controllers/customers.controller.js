@@ -1,18 +1,19 @@
 //Change This//////////////////////////
-const controllerPrefix = 'todo';
-const tableName = 'todos';
-const referenceTableID = 'userID';
+const controllerPrefix = 'customers';
+const tableName = 'customers';
+const referenceTableID = 'id';
 /////////////////////////////////////
 const service = require('../services/'+controllerPrefix+'.service');
 const connection = require('../helpers/dbconnect.helper');
 const { all } = require('../routes/user.route');
 
 exports.add = async (req, res,next) => {
-	let abc = req.body;
-	console.log(req.body.title);
+	console.log(req.body);
+	
+	let theQuery = req.body;
 	try {
 
-		let result = await service.add(abc);
+		let result = await service.add(theQuery);
 		let latest = await service.getLatest();
 		if(result.affectedRows > 0){
 			return res.json({
@@ -183,14 +184,14 @@ exports.getById = async (req, res, next) => {
 	}
 }
 exports.getMany = async (req, res, next) => {
-	console.log("we trying now");
 	try {
 		
 	
 		let result = await service.getMany(req.query);
 		if (result.length > 0) {
+			console.log(result.length);
 			let totalItems=0;
-			connection.query(`select count(*) as totalRows from `+tableName+` where `+referenceTableID+` in (?)`, [req.query.id],
+			connection.query(`select count(*) as totalCounts from `+tableName+` where id in (`+req.query.id+`)`,
 			function (error, totalCounts){
 				if(error) {
 					return reject(error);
@@ -199,7 +200,7 @@ exports.getMany = async (req, res, next) => {
 					
 					return res.json({
 						status: true,
-						"total": totalItems,
+						"total": totalCounts,
 						message: `Sucess!`,
 						result: result,
 						
