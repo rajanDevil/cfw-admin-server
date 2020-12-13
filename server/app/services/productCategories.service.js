@@ -1,18 +1,26 @@
 //Edit Table Name////////////////
-const tableName = 'todos';
+const tableName = 'product_categories';
 ////////////////////////////////
 
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const jwtConfig = require('../../config/jwt.config');
 const connection = require('../helpers/dbconnect.helper');
+const helpers = require('../helpers/helpers');
+const multer = require('multer');
+const path = require('path');
+
+
+var fs = require('fs');
+
 
 exports.add = (param) => {
+	
+	
 	return new Promise( async (resolve, reject) => {
 		//Edit Table fields to add///////
 		let tableFields = {
-			title: param.title,
-			userId: param.userID,
+			category: param.category,
 		}	
 		////////////////////////////////////	
 
@@ -24,15 +32,14 @@ exports.add = (param) => {
 			}
 		});
 	});
+	
 }
 
 exports.update = (param) => {
 	return new Promise( async (resolve, reject) => {
 		//Edit table fields to update/////////
 		let tableFields = {
-			id: param.id,
-			title: param.title,
-			userId: param.userID,
+			category: param.category,
 		}
 		//////////////////////////////////////
 
@@ -49,12 +56,46 @@ exports.update = (param) => {
 exports.list = (reqParam) => {
 
 	///EDIT FILTERS IN THIS BLOCK//////////////////////////////////////
-	if(reqParam.userID || reqParam.q){
+	if(!reqParam._sort || !reqParam._order || !reqParam._start || !reqParam._skip){
+		if(reqParam.category){
+			return new Promise( async (resolve, reject) => {
+				connection.query(`select * from `+tableName+` where id in (?) AND category LIKE '%`+reqParam.q+`%'`, [reqParam.category], function (error, result, fields) {
+					if (error) {
+						return reject(error);
+					} else {
+						return resolve(result);
+					}
+				});
+			});
+		}else{
+			return new Promise( async (resolve, reject) => {
+				connection.query(`select * from `+tableName+` where category LIKE '%`+reqParam.q+`%'`, function (error, result, fields) {
+					if (error) {
+						return reject(error);
+					} else {
+						return resolve(result);
+					}
+				});
+			});
+		}
+	}else{
+	if(reqParam.category || reqParam.q){
 		console.log('id present');
 
-		if(reqParam.q && reqParam.userID){
+		if(reqParam.q && reqParam.category){
 			return new Promise( async (resolve, reject) => {
-				connection.query(`select * from `+tableName+` where userID in (?) AND title LIKE '%`+reqParam.q+`%' ORDER BY `+reqParam._sort+` `+reqParam._order+` LIMIT ?,?`, [[reqParam.userID],parseInt(reqParam._start), parseInt(reqParam._skip)], function (error, result, fields) {
+				connection.query(`select * from `+tableName+` where id in (?) AND category LIKE '%`+reqParam.q+`%' ORDER BY `+reqParam._sort+` `+reqParam._order+` LIMIT ?,?`, [[reqParam.category],parseInt(reqParam._start), parseInt(reqParam._skip)], function (error, result, fields) {
+					if (error) {
+						return reject(error);
+					} else {
+						return resolve(result);
+					}
+				});
+			});
+		}
+		else if(!reqParam.q && reqParam.category){
+			return new Promise( async (resolve, reject) => {
+				connection.query(`select * from `+tableName+` where id in (?) ORDER BY `+reqParam._sort+` `+reqParam._order+` LIMIT ?,?`, [[reqParam.category],parseInt(reqParam._start), parseInt(reqParam._skip)], function (error, result, fields) {
 					if (error) {
 						return reject(error);
 					} else {
@@ -65,7 +106,7 @@ exports.list = (reqParam) => {
 		}
 		else{
 			return new Promise( async (resolve, reject) => {
-				connection.query(`select * from `+tableName+` where title LIKE '%`+reqParam.q+`%' ORDER BY `+reqParam._sort+` `+reqParam._order+` LIMIT ?,?`,[parseInt(reqParam._start), parseInt(reqParam._skip)], function (error, result, fields) {
+				connection.query(`select * from `+tableName+` where category LIKE '%`+reqParam.q+`%' ORDER BY `+reqParam._sort+` `+reqParam._order+` LIMIT ?,?`,[parseInt(reqParam._start), parseInt(reqParam._skip)], function (error, result, fields) {
 					if (error) {
 						return reject(error);
 					} else {
@@ -90,6 +131,7 @@ exports.list = (reqParam) => {
 		});
 	}
 	
+}
 }
 
 exports.delete = (reqParam) => {
@@ -141,13 +183,25 @@ exports.getLatest = () => {
 }
 
 exports.getMany = (reqParam) => {
-	return new Promise( async (resolve, reject) => {
-		connection.query(`select * from `+tableName+` where userID in (?) ORDER BY `+reqParam._sort+` `+reqParam._order+` LIMIT ?,?`, [[reqParam.id],parseInt(reqParam._start), parseInt(reqParam._skip)], function (error, result, fields) {
-			if (error) {
-				return reject(error);
-			} else {
-				return resolve(result);
-			}
+	if(!reqParam._sort || !reqParam._order || !reqParam._start || !reqParam._skip){
+		return new Promise( async (resolve, reject) => {
+			connection.query(`select * from `+tableName+` where id in (?)`, [reqParam.id], function (error, result, fields) {
+				if (error) {
+					return reject(error);
+				} else {
+					return resolve(result);
+				}
+			});
 		});
-	});
+	}else{
+		return new Promise( async (resolve, reject) => {
+			connection.query(`select * from `+tableName+` where id in (?) ORDER BY `+reqParam._sort+` `+reqParam._order+` LIMIT ?,?`, [[reqParam.id],parseInt(reqParam._start), parseInt(reqParam._skip)], function (error, result, fields) {
+				if (error) {
+					return reject(error);
+				} else {
+					return resolve(result);
+				}
+			});
+		});
+	}
 }

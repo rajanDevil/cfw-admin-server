@@ -1,6 +1,6 @@
 
 //Edit this to set controller prefix
-const controllerPrefix = 'todo';
+const controllerPrefix = 'purchases';
 ///////////////////////////////////
 const controller = require('../controllers/'+controllerPrefix+'.controller');
 const express = require('express');

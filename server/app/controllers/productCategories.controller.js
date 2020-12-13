@@ -1,18 +1,19 @@
 //Change This//////////////////////////
-const controllerPrefix = 'todo';
-const tableName = 'todos';
-const referenceTableID = 'userID';
+const controllerPrefix = 'productCategories';
+const tableName = 'product_categories';
+const referenceTableID = 'id';
 /////////////////////////////////////
 const service = require('../services/'+controllerPrefix+'.service');
 const connection = require('../helpers/dbconnect.helper');
 const { all } = require('../routes/user.route');
 
 exports.add = async (req, res,next) => {
-	let abc = req.body;
-	console.log(req.body.title);
+	console.log(req.body);
+	
+	let theQuery = req.body;
 	try {
 
-		let result = await service.add(abc);
+		let result = await service.add(theQuery);
 		let latest = await service.getLatest();
 		if(result.affectedRows > 0){
 			return res.json({
@@ -183,7 +184,6 @@ exports.getById = async (req, res, next) => {
 	}
 }
 exports.getMany = async (req, res, next) => {
-	console.log("we trying now");
 	try {
 		
 	
