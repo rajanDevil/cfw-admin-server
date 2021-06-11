@@ -2,8 +2,8 @@ module.exports = {
     'connection': {
         'host': 'localhost',
         'user': 'root',
-        'password': '',
-        'database': 'cfwdb'
+        'password': 'password',
+        'database': 'cfw'
     },
-	'database': 'cfwdb',
+	'database': 'cfw',
 };
