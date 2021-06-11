@@ -37,7 +37,7 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
 
-const dataProvider = jsonapiClient('http://localhost:3001');
+const dataProvider = jsonapiClient('http://52.200.24.125:8080');
 const capableDataProvider = addUploadCapabilities(dataProvider);
 
 const App = () => (

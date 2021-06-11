@@ -10,7 +10,7 @@ export const userService = {
     delete: _delete,
     addTodos
 };
-const baseUrl = `http://localhost:3001`;
+const baseUrl = `http://52.200.24.125:8080`;
 
 function login(email, password) {
     const requestOptions = {

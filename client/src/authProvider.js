@@ -4,7 +4,7 @@ const authProvider = {
     login: ({ username, password }) => {
         const email = username;
 
-        const request = new Request('https://cityjeans1979.com/server/users/loginMe', {
+        const request = new Request('http://52.200.24.125:8080/users/loginMe', {
             method: 'POST',
             body: JSON.stringify({ email, password }),
             headers: new Headers({ 'Content-Type': 'application/json' }),
