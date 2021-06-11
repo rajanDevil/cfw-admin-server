@@ -56,14 +56,14 @@ function addTodos(todos) {
     return fetch(`${baseUrl}/todos/add`, requestOptions).then(handleResponse);
 }
 
-// function getById(id) {
-//     const requestOptions = {
-//         method: 'GET',
-//         headers: authHeader()
-//     };
+function getById(id) {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
 
-//     return fetch(`/users/${id}`, requestOptions).then(handleResponse);
-// }
+    return fetch(`/users/${id}`, requestOptions).then(handleResponse);
+}
 
 function register(user) {
     const requestOptions = {
