@@ -58,6 +58,6 @@ app.use('/customerReturns', customerReturnsRoute);
 app.use(errorHandler);
 
 
-app.listen(8080, () => {
-	console.log("Server is listening on port 8080");
+app.listen(80, () => {
+	console.log("Server is listening on port 80");
 });
