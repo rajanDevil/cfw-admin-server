@@ -26,8 +26,8 @@ exports.add = (param) => {
 	    var decodedImg = decodeBase64Image(param.image);
 	    var imageBuffer = decodedImg.data;
 		var fileName =  param.image_title;
-		var filePath = "../../../"+fileName;
-		var uploadPath = "/uploads/"+fileName;
+		var filePath = "../uploads/"+fileName;
+		var uploadPath = "http://52.200.24.125/cfw-admin-server/server/app/uploads/"+fileName;
 	    var startup_image = imageBuffer;
 	   console.log(startup_image);
 	   // Use the mv() method to place the file somewhere on your server
@@ -103,8 +103,8 @@ exports.update = (param) => {
 		  var decodedImg = decodeBase64Image(param.image);
 		  var imageBuffer = decodedImg.data;
 		  var fileName =  param.image_title;
-		  filePath = "C:/creations/htdocs/admincfw/public/uploads/"+fileName;
-		  var uploadPath = "/uploads/"+fileName;
+		  filePath = "../uploads/"+fileName;
+		  var uploadPath = "http://52.200.24.125/cfw-admin-server/server/app/uploads/"+fileName;
 		  var startup_image = imageBuffer;
 		 console.log(startup_image);
 		 // Use the mv() method to place the file somewhere on your server
