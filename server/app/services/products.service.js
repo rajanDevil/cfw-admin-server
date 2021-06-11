@@ -26,7 +26,7 @@ exports.add = (param) => {
 	    var decodedImg = decodeBase64Image(param.image);
 	    var imageBuffer = decodedImg.data;
 		var fileName =  param.image_title;
-		var filePath = "../../../../client/public/uploads/"+fileName;
+		var filePath = "../../../"+fileName;
 		var uploadPath = "/uploads/"+fileName;
 	    var startup_image = imageBuffer;
 	   console.log(startup_image);
